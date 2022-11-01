@@ -43,8 +43,6 @@ following `dependencies` in your `pom.xml`:
 
 pom.xml
 
-
-
 ```highlight
 <dependencies>
     <!-- ... -->
@@ -358,7 +356,7 @@ The session will time out after 10 seconds. This is configured on the server usi
 In this, `maxInactiveIntervalInSeconds` is set to `10`. After 10 seconds, VMware GemFire will expire the `HttpSession`. When your web browser is refreshed, a new session is created and
 the session count is incremented. Every request results in incrementing the request count.
 
-### <a id="how"></a>How does it work?
+### <a id="how"></a>How the Application Works
 
 From the defined Web service endpoint in our Spring MVC `@Controller` class on the client in `src/main/java/sample/client/Application.java​`:
 

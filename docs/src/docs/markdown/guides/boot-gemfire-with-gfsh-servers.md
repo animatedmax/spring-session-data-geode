@@ -59,7 +59,7 @@ then stored and managed in VMware GemFire.
 
 ### <a id="spring-boot-app"></a>The Spring Boot, VMware GemFire `ClientCache`, Web Application
 
-Let's start by creating a Spring Boot, Web application to expose our Web
+We start by creating a Spring Boot, Web application to expose our Web
 Service using Spring Web MVC, running as an VMware GemFire
 client, connected to our VMware GemFire servers. The Web
 application will use Spring Session backed by VMware GemFire
@@ -124,16 +124,16 @@ public class Application {
 Comments:
 
 1.  We start by declaring our Web application to be a Spring Boot
-    application simply by annotating our application class with
+    application by annotating our application class with
     `@SpringBootApplication`.
 
-2.  We also declare our Web application to be an VMware GemFire client by
+2.  We declare our Web application to be an VMware GemFire client by
     annotating our application class with `@ClientCacheApplication`.
     Additionally, we set `subscriptionEnabled` to receive notifications
     for any updates to the `HttpSession` that may have originated from a
     different application client accessing the same `HttpSession`.
 
-3.  Next, we declare that the Web application will use Spring Session
+3.  We declare that the Web application will use Spring Session
     backed by VMware GemFire by annotating the application
     class with `@EnableGemFireHttpSession`. This will create the
     necessary client-side PROXY `Region`, which we have explicitly named
@@ -152,7 +152,7 @@ Comments:
 6.  We add an error handler to print out the Stack Trace of any Exception
     thrown by the server.
 
-7.  Finally, we declare the `/session` HTTP request handler method to
+7.  We declare the `/session` HTTP request handler method to
     set an `HttpSession` attribute and increment a count for the number
     of HTTP requests that have occurred during this `HttpSession`.
 
@@ -163,7 +163,7 @@ deployments, where the cluster includes potentially hundreds or
 thousands of servers (a.k.a. data nodes), it is more common for clients
 to connect to one or more VMware GemFire Locators running in the
 same cluster. A Locator passes meta-data to clients about the servers
-available in the cluster, the individual server load and which servers
+available in the cluster, the individual server load, and which servers
 have the client's data of interest, which is particularly important for
 direct, single-hop data access and latency-sensitive applications. For more information, see <a
 href="https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-topologies_and_comm-cs_configuration-standard_client_server_deployment.html">Standard Client/Server Deployment</a> in the VMware GemFire product documentation.</p>
@@ -204,7 +204,6 @@ are not required to match if the client <code>Region</code> is
 propagated to the server and you lose all the benefits of using
 VMware GemFire to store and manage <code>HttpSession</code>
 state on the servers in a distributed, replicated manner.</p>
-
 
 ### <a id="starting-servers-with-gfsh"></a>Starting VMware GemFire Servers with gfsh
 
