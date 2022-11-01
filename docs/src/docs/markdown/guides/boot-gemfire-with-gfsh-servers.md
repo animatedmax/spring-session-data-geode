@@ -482,6 +482,7 @@ SELECT session.id FROM /Sessions session
 SELECT session.getClass().getName() FROM /Sessions session
 SELECT attributes.key, attributes.value FROM /Sessions session, session.attributes attributes
 ```
+
 ## <a id="conclusion"></a>Conclusion
 
 In this sample, we saw how to specifically configure and bootstrap a
