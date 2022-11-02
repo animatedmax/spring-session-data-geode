@@ -41,8 +41,6 @@ Before using Spring Session, you must ensure that the required
 dependencies are included. If you are using Maven, include the
 following `dependencies` in your `pom.xml`:
 
-pom.xml
-
 ```highlight
 <dependencies>
     <!-- ... -->

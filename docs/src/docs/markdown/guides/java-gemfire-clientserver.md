@@ -12,15 +12,13 @@ Before using Spring Session, you must ensure that the required
 dependencies are included. If you are using Maven, include the
 following `dependencies` in your `pom.xml`:
 
-pom.xml
-
 ```highlight
 <dependencies>
     <!-- ... -->
 
     <dependency>
         <groupId>org.springframework.session</groupId>
-        <artifactId>spring-session-data-geode</artifactId>
+        <artifactId>spring-session-data-gemfire</artifactId>
         <version>2.7.1</version>
         <type>pom</type>
     </dependency>
@@ -142,7 +140,7 @@ Comments
 `javax.servlet.http.HttpSession` with a custom implementation backed by Spring Session and VMware
 GemFire.
 
-The `Filter` requires that Spring loads the `ClientConfig` class. We also must ensure that the
+The `Filter` requires that Spring loads the `ClientConfig` class. We must also ensure that the
 Servlet container, Tomcat, uses the `springSessionRepositoryFilter` for every request.
 
 Spring Session provides a utility class named `AbstractHttpSessionApplicationInitializer` that
@@ -160,7 +158,7 @@ public class Initializer extends AbstractHttpSessionApplicationInitializer { <!-
 
 Comments:
 
-1. Extends `AbstractHttpSessionApplicationInitializer`. This ensures that a Spring bean named `springSessionRepositoryFilter` is registered with the Servlet container and used on every HTTP request.
+1. Extends `AbstractHttpSessionApplicationInitializer` to ensure that a Spring bean named `springSessionRepositoryFilter` is registered with the Servlet container and is used for every HTTP request.
 
 2. `AbstractHttpSessionApplicationInitializer` provides a mechanism to allow Spring to load the `ClientConfig`.
 
@@ -203,7 +201,7 @@ the server is standalone, separate JVM process.
 
 ### <a id="how"></a>How the Application Works
 
-We interact with the standard `HttpSession` in the `SessionServlet`, located in `src/main/java/sample/SessionServlet.java`
+We interact with the standard `HttpSession` in the `SessionServlet`, located in `src/main/java/sample/SessionServlet.java`:
 
 ```highlight
 @WebServlet("/session")
@@ -224,6 +222,6 @@ public class SessionServlet extends HttpServlet {
 }```
 
 
-Instead of using Tomcat's `HttpSession`, persist the Session in VMware GemFire. Spring Session
+Instead of using Tomcat's `HttpSession`, we persist the Session in VMware GemFire. Spring Session
 creates a cookie named "SESSION" in your browser that contains the ID of
 the Session. You can view the cookies using your browser controls.
