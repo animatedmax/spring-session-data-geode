@@ -179,8 +179,7 @@ Unresolved directive in xml-gemfire-clientserver.adoc - include::{samples-dir}xm
 2.  We must create an instance of an VMware GemFire `ClientCache`. We
     initialize it with our `gemfireProperties`.
 
-3.  Then we configure a `Pool` of connections to talk to the Apache
-    Geode Server in our Client/Server topology. In our configuration, we
+3.  Then we configure a `Pool` of connections to talk to the VMware GemFire Server in our Client/Server topology. In our configuration, we
     use sensible settings for timeouts, number of connections and so on.
     Also, our `Pool` has been configured to connect directly to the
     server (using the nested `gfe:server` element).
@@ -248,8 +247,7 @@ Guide</a>.</td>
 
 
 
-So far, we only covered one side of the equation. We also need an Apache
-Geode Server for our cache client to talk to and send session state to
+So far, we only covered one side of the equation. We also need an VMware GemFire Server for our cache client to talk to and send session state to
 the server to manage.
 
 

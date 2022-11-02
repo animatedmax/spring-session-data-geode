@@ -60,13 +60,13 @@ pom.xml
 </dependencies>
 ```
 
-## <a id="updating-dependencies"></a>Spring Boot Configuration
+## <a id="spring-boot-configuration"></a>Spring Boot Configuration
 
 After adding the required dependencies and repository declarations, we
 can create the Spring configuration for both our VMware GemFire client and
 server using Spring Boot. The Spring configuration is responsible for
 creating a Servlet `Filter` that replaces the `HttpSession` with an
-implementation backed by Spring Session and Apace Geode.
+implementation backed by Spring Session and VMware GemFire.
 
 ### <a id="spring-boot-gemfire-cache-server"></a>Spring Boot, VMware GemFire Cache Server
 

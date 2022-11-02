@@ -57,8 +57,7 @@ Spring Session to transparently manage a Web application's
 Note
 </td>
 <td class="content">The completed guide can be found in the <a
-href="#spring-session-sample-xml-geode-p2p">HttpSession with Apache
-Geode (P2P) using XML Sample Application</a>.</td>
+href="#spring-session-sample-xml-geode-p2p">HttpSession with VMware GemFire (P2P) using XML Sample Application</a>.</td>
 </tr>
 </tbody>
 </table>

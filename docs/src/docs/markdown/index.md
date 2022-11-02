@@ -486,8 +486,7 @@ Guide</em> when integrating with your own application.</td>
 After adding the required dependencies and repository declarations, we
 can create the Spring configuration. The Spring configuration is
 responsible for creating a Servlet `Filter` that replaces the
-`HttpSession` with an implementation backed by Spring Session and Apache
-Geode.
+`HttpSession` with an implementation backed by Spring Session and VMware GemFire.
 
 </div>
 
@@ -523,8 +522,7 @@ Unresolved directive in guides/java-gemfire-clientserver.adoc - include::{sample
 2.  `@EnableGemFireHttpSession` creates a Spring bean named
     `springSessionRepositoryFilter` that implements
     `javax.servlet.Filter`. The filter replaces the `HttpSession` with
-    an implementation provided by Spring Session and backed by Apache
-    Geode. Additionally, the configuration will also create the
+    an implementation provided by Spring Session and backed by VMware GemFire. Additionally, the configuration will also create the
     necessary client-side `Region` (by default,
     "ClusteredSpringSessions\`, which is a `PROXY` `Region`)
     corresponding to the same server-side `Region` by name. All session
@@ -578,8 +576,7 @@ Deployment</a> in the VMware GemFire User Guide.</td>
 <td class="icon"><div class="title">
 Note
 </div></td>
-<td class="content">For more information on configuring Spring Data
-Geode, refer to the <a
+<td class="content">For more information on configuring Spring Data for GemFire, refer to the <a
 href="https://docs.spring.io/spring-data/geode/docs/current/reference/html">Reference
 Guide</a>.</td>
 </tr>

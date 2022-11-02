@@ -24,6 +24,6 @@ wait \*\*20 seconds\*\* for the session to timeout/expire and then
 refresh the page. The attribute we added should no longer be displayed
 in the table. However, keep in mind, by refreshing the page, you will
 inadvertently create a new (empty) session. If you run the query again,
-you will also see two session ids, the new and the old, since Apache
-Geode keeps a "tombstone" of the old session around (for consistency
+you will also see two session ids, the new and the old, since
+VMware GemFire keeps a "tombstone" of the old session around (for consistency
 purposes).
