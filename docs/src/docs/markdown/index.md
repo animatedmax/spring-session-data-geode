@@ -1,395 +1,125 @@
-<div id="header">
-
-# Spring Session
-
-<div class="details">
-
-<span id="author" class="author">John Blum</span>  
-
-</div>
-
-<div id="toc" class="toc2">
-
-<div id="toctitle">
-
-Table of Contents
-
-</div>
-
-- [Introduction](#introduction)
-- [Samples and Guides (Start Here)](#samples)
-- [HttpSession Integration](#httpsession)
-  - [Why Spring Session & HttpSession?](#httpsession-why)
-  - [HttpSession Management with
-    VMware GemFire](#httpsession-gemfire)
-  - [Configuring `HttpSession` Management using VMware GemFire
-    with Properties](#httpsession-gemfire-configuration-properties)
-  - [Configuring `HttpSession` Management using VMware GemFire
-    with a Configurer](#httpsession-gemfire-configuration-configurer)
-  - [VMware GemFire
-    Expiration](#httpsession-gemfire-expiration)
-  - [VMware GemFire
-    Serialization](#httpsession-gemfire-serialization)
-  - [How HttpSession Integration Works](#httpsession-how)
-  - [HttpSessionListener](#httpsession-httpsessionlistener)
-  - [Session](#api-session)
-  - [SessionRepository](#api-sessionrepository)
-  - [FindByIndexNameSessionRepository](#api-findbyindexnamesessionrepository)
-  - [EnableSpringHttpSession](#api-enablespringhttpsession)
-  - [EnableGemFireHttpSession](#api-enablegemfirehttpsession)
-  - [GemFireOperationsSessionRepository](#api-gemfireoperationssessionrepository)
-- [Spring Session Community](#community)
-  - [Support](#community-support)
-  - [Source Code](#community-source)
-  - [Issue Tracking](#community-issues)
-  - [Contributing](#community-contributing)
-  - [License](#community-license)
-- [Minimum Requirements](#minimum-requirements)
-
-</div>
-
-</div>
-
-<div id="content">
-
-<div id="preamble">
-
-<div class="sectionbody">
-
-<div id="abstract" class="paragraph">
-
-Spring Session provides an API and implementations for managing a user's
-session information.
-
-</div>
-
-<div class="admonitionblock note">
-
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td class="icon"><div class="title">
-Note
-</div></td>
-<td class="content">This documentation is also available as <a
-href="https://docs.spring.io/spring-session-data-gemfire/docs/%7Bspring-session-data-gemfire-version%7D/reference/pdf/spring-session-data-gemfire-reference.pdf">PDF</a>.</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="sect1">
-
-## Introduction
-
-<div class="sectionbody">
-
-<div class="paragraph">
+---
+title: Spring Session
+---
 
 Spring Session provides an API and implementations for managing a user's
 session information. It also provides transparent integration with:
 
-</div>
+- **HttpSession**: Enables the `HttpSession` to be clustered without being tied to an application container-specific solution.
 
-<div class="ulist">
+- **REST API**: Allows the session ID to be provided in the protocol header to work with RESTful APIs.
 
-- **HttpSession** - enables the `HttpSession` to be
-  [clustered](#httpsession-gemfire) (i.e. replicated for highly
-  availability) without being tied to an application container specific
-  solution.
+- **WebSocket**: Provides the ability to keep the `HttpSession` alive when receiving WebSocket messages.
 
-- **REST API** - allows the session ID to be provided in the protocol
-  header to work with RESTful APIs.
+- **WebSession**: Allows replacing the Spring WebFlux's `WebSession` in an application container neutral way.
 
-- **WebSocket** - provides the ability to keep the `HttpSession` alive
-  when receiving WebSocket messages.
+Spring Session replaces the `javax.servlet.http.HttpSession` in an application container neutral way by supplying a more common and robust session implementation backing the `HttpSession`.
 
-- **WebSession** - allows replacing the Spring WebFlux's `WebSession` in
-  an application container neutral way.
+## <a id="sample-applications-and-guides"></a>Sample Applications and Guides
 
-</div>
+### <a id="spring-boot"></a>Table 1. Sample Application using Spring Boot
 
-<div class="paragraph">
-
-In a nutshell, Spring Session replaces the
-`javax.servlet.http.HttpSession` in an application container neutral way
-by supplying a more common and robust session implementation backing the
-`HttpSession`.
-
-</div>
-
-</div>
-
-</div>
-
-<div class="sect1">
-
-## Samples and Guides (Start Here)
-
-<div class="sectionbody">
-
-<div class="paragraph">
-
-If you are looking to get started with Spring Session right of way, the
-best place to start is with our Sample Applications.
-
-</div>
-
-<table class="tableblock frame-all grid-all stretch">
-<caption>Table 1. Sample Application using Spring Boot</caption>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th class="tableblock halign-left valign-top">Source</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Guide</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td
-class="tableblock halign-left valign-top"><p>{gh-samples-url}boot/gemfire[HttpSession
-with Spring Boot and VMware GemFire]</p></td>
-<td class="tableblock halign-left valign-top"><p>Demonstrates how to use
-Spring Session to manage the <code>HttpSession</code> with
-VMware GemFire in a Spring Boot application using a
-Client/Server topology.</p></td>
-<td class="tableblock halign-left valign-top"><p><a
-href="guides/boot-gemfire.html">HttpSession with Spring Boot and
-VMware GemFire Guide</a></p></td>
-</tr>
-<tr class="even">
-<td
-class="tableblock halign-left valign-top"><p>{gh-samples-url}boot/gemfire-with-gfsh-servers[HttpSession
-with Spring Boot and VMware GemFire using Gfsh]</p></td>
-<td class="tableblock halign-left valign-top"><p>Demonstrates how to use
-Spring Session to manage the <code>HttpSession</code> with
-VMware GemFire in a Spring Boot application using a
-Client/Server topology. Additionally configures and uses
-VMware GemFire's <em>DataSerialization</em>
-framework.</p></td>
-<td class="tableblock halign-left valign-top"><p><a
-href="guides/boot-gemfire-with-gfsh-servers.html">HttpSession with
-Spring Boot and VMware GemFire using Gfsh Guide</a></p></td>
-</tr>
-<tr class="odd">
-<td
-class="tableblock halign-left valign-top"><p>{gh-samples-url}boot/gemfire-with-scoped-proxies[HttpSession
-with Spring Boot and VMware GemFire using Scoped
-Proxies]</p></td>
-<td class="tableblock halign-left valign-top"><p>Demonstrates how to use
-Spring Session to manage the <code>HttpSession</code> with
-VMware GemFire in a Spring Boot application using a
-Client/Server topology. The application also makes use of Spring Request
-and Session Scoped Proxy beans.</p></td>
-<td class="tableblock halign-left valign-top"><p><a
-href="guides/boot-gemfire-with-scoped-proxies.html">HttpSession with
-Spring Boot and VMware GemFire using Scoped Proxies
-Guide</a></p></td>
-</tr>
-</tbody>
+<table>
+  <thead>
+    <tr class="header">
+      <th>Source Code</th>
+      <th>Description</th>
+      <th>Guide</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="odd">
+      <td><a href="https://github.com/spring-projects/spring-session-data-geode/tree/2.7.1/samples/boot/gemfire">HttpSession with Spring Boot and VMware GemFire</a></td>
+      <td>Demonstrates how to use Spring Session to manage the <code>HttpSession</code> with VMware GemFire in a Spring Boot application using a Client/Server topology.</td>
+      <td><a href="guides/boot-gemfire.html">HttpSession with Spring Boot and VMware GemFire Guide</a></td>
+    </tr>
+    <tr class="even">
+      <td><a href="https://github.com/spring-projects/spring-session-data-geode/tree/2.7.1/samples/boot/gemfire-with-gfsh-servers">HttpSession with Spring Boot and VMware GemFire using gfsh</a></td>
+      <td>Demonstrates how to use Spring Session to manage the <code>HttpSession</code> with VMware GemFire in a Spring Boot application using a Client/Server topology. Additionally configures and uses VMware GemFire's <em>DataSerialization</em> framework.</td>
+      <td><a href="guides/boot-gemfire-with-gfsh-servers.html">HttpSession with Spring Boot and VMware GemFire using gfsh Guide</a></td>
+    </tr>
+    <tr class="odd">
+      <td><a href="https://github.com/spring-projects/spring-session-data-geode/tree/2.7.1/samples/boot/gemfire-with-scoped-proxies">HttpSession with Spring Boot and VMware GemFire using Scoped Proxies</a></td>
+      <td>Demonstrates how to use Spring Session to manage the <code>HttpSession</code> with VMware GemFire in a Spring Boot application using a Client/Server topology. The application also makes use of Spring Request and Session Scoped Proxy beans.</td>
+      <td><a href="guides/boot-gemfire-with-scoped-proxies.html">HttpSession with Spring Boot and VMware GemFire using Scoped Proxies Guide</a></td>
+    </tr>
+  </tbody>
 </table>
 
-Table 1. Sample Application using Spring Boot
+### <a id="java-based"></a>Table 2. Sample Applications Using Spring's Java-Based Configuration
 
-<table class="tableblock frame-all grid-all stretch">
-<caption>Table 2. Sample Applications using <em>Spring's</em> Java-based
-configuration</caption>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th class="tableblock halign-left valign-top">Source</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Guide</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td
-class="tableblock halign-left valign-top"><p>{gh-samples-url}javaconfig/gemfire-clientserver[HttpSession
-with VMware GemFire (Client/Server)]</p></td>
-<td class="tableblock halign-left valign-top"><p>Demonstrates how to use
-Spring Session to manage the <code>HttpSession</code> with
-VMware GemFire using a Client/Server topology.</p></td>
-<td class="tableblock halign-left valign-top"><p><a
-href="guides/java-gemfire-clientserver.html">HttpSession with
-VMware GemFire (Client/Server) Guide</a></p></td>
-</tr>
-<tr class="even">
-<td
-class="tableblock halign-left valign-top"><p>{gh-samples-url}javaconfig/gemfire-p2p[HttpSession
-with VMware GemFire (P2P)]</p></td>
-<td class="tableblock halign-left valign-top"><p>Demonstrates how to use
-Spring Session to manage the <code>HttpSession</code> with
-VMware GemFire using a P2P topology.</p></td>
-<td class="tableblock halign-left valign-top"><p><a
-href="guides/java-gemfire-p2p.html">HttpSession with
-VMware GemFire (P2P) Guide</a></p></td>
-</tr>
-</tbody>
+<table>
+  <thead>
+    <tr class="header">
+      <th>Source Code</th>
+      <th>Description</th>
+      <th>Guide</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="odd">
+      <td><a href="https://github.com/spring-projects/spring-session-data-geode/tree/2.7.1/samples/javaconfig/gemfire-clientserver">HttpSession with VMware GemFire Client/Server</a></td>
+      <td>Demonstrates how to use Spring Session to manage the <code>HttpSession</code> with VMware GemFire using a Client/Server topology.</td>
+      <td><a href="guides/java-gemfire-clientserver.html">HttpSession with VMware GemFire Client/Server Guide</a></td>
+    </tr>
+    <tr class="even">
+      <td><a href="https://github.com/spring-projects/spring-session-data-geode/tree/2.7.1/samples/javaconfig/gemfire-p2p">HttpSession with VMware GemFire P2P</a></td>
+      <td>Demonstrates how to use Spring Session to manage the <code>HttpSession</code> with VMware GemFire using a P2P topology.</td>
+      <td><a href="guides/java-gemfire-p2p.html">HttpSession with VMware GemFire P2P Guide</a></td>
+    </tr>
+  </tbody>
 </table>
 
-Table 2. Sample Applications using *Spring's* Java-based configuration
+### <a id="xml-based"></a>Table 2. Sample Applications Using Spring's XML-Based Configuration
 
-<table class="tableblock frame-all grid-all stretch">
-<caption>Table 3. Sample Applications using <em>Spring's</em> XML-based
-configuration</caption>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th class="tableblock halign-left valign-top">Source</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Guide</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td
-class="tableblock halign-left valign-top"><p>{gh-samples-url}xml/gemfire-clientserver[HttpSession
-with VMware GemFire (Client/Server)]</p></td>
-<td class="tableblock halign-left valign-top"><p>Demonstrates how to use
-Spring Session to manage the <code>HttpSession</code> with
-VMware GemFire using a Client/Server topology.</p></td>
-<td class="tableblock halign-left valign-top"><p><a
-href="guides/xml-gemfire-clientserver.html">HttpSession with
-VMware GemFire (Client/Server) Guide</a></p></td>
-</tr>
-<tr class="even">
-<td
-class="tableblock halign-left valign-top"><p>{gh-samples-url}xml/gemfire-p2p[HttpSession
-with VMware GemFire (P2P)]</p></td>
-<td class="tableblock halign-left valign-top"><p>Demonstrates how to use
-Spring Session to manage the <code>HttpSession</code> with
-VMware GemFire using a P2P topology.</p></td>
-<td class="tableblock halign-left valign-top"><p><a
-href="guides/xml-gemfire-p2p.html">HttpSession with
-VMware GemFire (P2P) Guide</a></p></td>
-</tr>
-</tbody>
+<table>
+  <thead>
+    <tr class="header">
+      <th>Source Code</th>
+      <th>Description</th>
+      <th>Guide</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="odd">
+      <td><a href="https://github.com/spring-projects/spring-session-data-geode/tree/2.7.1/samples/xml/gemfire-clientserver">HttpSession with VMware GemFire Client/Server</a></td>
+      <td>Demonstrates how to use Spring Session to manage the <code>HttpSession</code> with VMware GemFire using a Client/Server topology.</td>
+      <td><a href="guides/xml-gemfire-clientserver.html">HttpSession with VMware GemFire Client/Server Guide</a></td>
+    </tr>
+    <tr class="even">
+      <td><a href="https://github.com/spring-projects/spring-session-data-geode/tree/2.7.1/samples/xml/gemfire-p2p">HttpSession with VMware GemFire P2P</a></td>
+      <td>Demonstrates how to use Spring Session to manage the <code>HttpSession</code> with VMware GemFire using a P2P topology.</td>
+      <td><a href="guides/xml-gemfire-p2p.html">HttpSession with VMware GemFire P2P Guide</a></td>
+    </tr>
+  </tbody>
 </table>
 
-Table 3. Sample Applications using *Spring's* XML-based configuration
-
-</div>
-
-</div>
-
-<div class="sect1">
-
-## HttpSession Integration
-
-<div class="sectionbody">
-
-<div class="paragraph">
+## <a id="httpsession-integration"></a>HttpSession Integration
 
 Spring Session provides transparent integration with
 `javax.servlet.http.HttpSession`. This means that developers can replace
 the `HttpSession` implementation with an implementation that is backed
 by Spring Session.
 
-</div>
+Spring Session enables multiple different data store providers, like VMware GemFire, to be plugged in to manage the `HttpSession` state.
 
-<div class="paragraph">
+### <a id="httpsession-management"></a>HttpSession Management with VMware GemFire
 
-Spring Session enables multiple different data store providers (e.g.
-like VMware GemFire) to be plugged in in order to manage the
-`HttpSession` state.
-
-</div>
-
-<div class="sect2">
-
-### Why Spring Session & HttpSession?
-
-<div class="paragraph">
-
-We already mentioned that Spring Session provides transparent
-integration with `HttpSession`, but what benefits do we get out of this?
-
-</div>
-
-<div class="ulist">
-
-- **HttpSession** - enables the `HttpSession` to be
-  [clustered](#httpsession-gemfire) (i.e. replicated for highly
-  availability) without being tied to an application container specific
-  solution.
-
-- **REST API** - allows the session ID to be provided in the protocol
-  header to work with RESTful APIs.
-
-- **WebSocket** - provides the ability to keep the `HttpSession` alive
-  when receiving WebSocket messages.
-
-- **WebSession** - allows replacing the Spring WebFlux's `WebSession` in
-  an application container neutral way.
-
-</div>
-
-</div>
-
-<div class="sect2">
-
-### HttpSession Management with VMware GemFire
-
-<div class="paragraph">
-
-When [VMware GemFire](https://geode.apache.org) is used with
+When [VMware GemFire](https://docs.vmware.com/en/VMware-Tanzu-GemFire/index.html) is used with
 Spring Session, a web application's `javax.servlet.http.HttpSession` can
 be replaced with a **clustered** implementation managed by
-VMware GemFire and conveniently accessed using Spring
-Session's API.
+VMware GemFire and accessed using Spring Session's API.
 
-</div>
+The two most common topologies for managing session state using VMware GemFire:
 
-<div class="paragraph">
+- [Client-Server](#clientserver)
+- [Peer-To-Peer (P2P)](#p2p)
 
-The two most common topologies for managing session state using
-VMware GemFire include:
-
-</div>
-
-<div class="ulist">
-
-- [Client-Server](#httpsession-gemfire-clientserver)
-
-- [Peer-To-Peer (P2P)](#httpsession-gemfire-p2p)
-
-</div>
-
-<div class="paragraph">
-
-Additionally, VMware GemFire supports site-to-site replication
-using the [WAN
-topology](https://geode.apache.org/docs/guide/%7Bmaster-data-store-version%7D/topologies_and_comm/multi_site_configuration/chapter_overview.html).
-The ability to configure and use VMware GemFire's WAN
-functionality is independent of Spring Session, and beyond the scope of
-this document.
-
-</div>
-
-<div class="paragraph">
+Additionally, VMware GemFire supports site-to-site replication using WAN topology.
+The ability to configure and use VMware GemFire's WAN functionality is independent of Spring Session.
+For more information, see
+[Multi-site (WAN) Configuration](https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-topologies_and_comm-multi_site_configuration-chapter_overview.html)
+in the VMware GemFire product documentation.
 
 More details on configuring VMware GemFire WAN functionality
 using Spring Data for VMware GemFire can be found
@@ -1634,88 +1364,68 @@ well-known, documented properties for all the
 </colgroup>
 <thead>
 <tr class="header">
-<th class="tableblock halign-left valign-top">Property</th>
-<th class="tableblock halign-left valign-top">Annotation attribute</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Default</th>
+<th>Property</th>
+<th>Annotation attribute</th>
+<th>Description</th>
+<th>Default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td
-class="tableblock halign-left valign-top"><p>spring.session.data.gemfire.cache.client.pool.name</p></td>
-<td
-class="tableblock halign-left valign-top"><p><code>EnableGemFireHttpSession.poolName</code></p></td>
-<td class="tableblock halign-left valign-top"><p>Name of the dedicated
-Pool used by the client Region storing/accessing Session state.</p></td>
-<td class="tableblock halign-left valign-top"><p>gemfirePool</p></td>
+<td>spring.session.data.gemfire.cache.client.pool.name</td>
+<td><code>EnableGemFireHttpSession.poolName</code></td>
+<td>Name of the dedicated
+Pool used by the client Region storing/accessing Session state.</td>
+<td>gemfirePool</td>
 </tr>
 <tr class="even">
-<td
-class="tableblock halign-left valign-top"><p>spring.session.data.gemfire.cache.client.region.shortcut</p></td>
-<td
-class="tableblock halign-left valign-top"><p><code>EnableGemFireHttpSession.clientRegionShortcut</code></p></td>
-<td class="tableblock halign-left valign-top"><p>Sets the client Region
-data management policy in the client-server topology.</p></td>
-<td
-class="tableblock halign-left valign-top"><p>ClientRegionShortcut.PROXY</p></td>
+<td>spring.session.data.gemfire.cache.client.region.shortcut</td>
+<td><code>EnableGemFireHttpSession.clientRegionShortcut</code></td>
+<td>Sets the client Region
+data management policy in the client-server topology.</td>
+<td>ClientRegionShortcut.PROXY</td>
 </tr>
 <tr class="odd">
-<td
-class="tableblock halign-left valign-top"><p>spring.session.data.gemfire.cache.server.region.shortcut</p></td>
-<td
-class="tableblock halign-left valign-top"><p><code>EnableGemFireHttpSession.serverRegionShortcut</code></p></td>
-<td class="tableblock halign-left valign-top"><p>Sets the peer Region
-data management policy in the peer-to-peer (P2P) topology.</p></td>
-<td
-class="tableblock halign-left valign-top"><p>RegionShortcut.PARTITION</p></td>
+<td>spring.session.data.gemfire.cache.server.region.shortcut</td>
+<td><code>EnableGemFireHttpSession.serverRegionShortcut</code></td>
+<td>Sets the peer Region
+data management policy in the peer-to-peer (P2P) topology.</td>
+<td>RegionShortcut.PARTITION</td>
 </tr>
 <tr class="even">
-<td
-class="tableblock halign-left valign-top"><p>spring.session.data.gemfire.session.attributes.indexable</p></td>
-<td
-class="tableblock halign-left valign-top"><p><code>EnableGemFireHttpSession.indexableSessionAttributes</code></p></td>
-<td class="tableblock halign-left valign-top"><p>Comma-delimited list of
-Session attributes to indexed in the Session Region.</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td>spring.session.data.gemfire.session.attributes.indexable</td>
+<td><code>EnableGemFireHttpSession.indexableSessionAttributes</code></td>
+<td>Comma-delimited list of
+Session attributes to indexed in the Session Region.</td>
+<td></td>
 </tr>
 <tr class="odd">
-<td
-class="tableblock halign-left valign-top"><p>spring.session.data.gemfire.session.expiration.bean-name</p></td>
-<td
-class="tableblock halign-left valign-top"><p><code>EnableGemFireHttpSession.sessionExpirationPolicyBeanName</code></p></td>
-<td class="tableblock halign-left valign-top"><p>Name of the bean in the
-Spring container implementing the expiration strategy</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td>spring.session.data.gemfire.session.expiration.bean-name</td>
+<td><code>EnableGemFireHttpSession.sessionExpirationPolicyBeanName</code></td>
+<td>Name of the bean in the
+Spring container implementing the expiration strategy</td>
+<td></td>
 </tr>
 <tr class="even">
-<td
-class="tableblock halign-left valign-top"><p>spring.session.data.gemfire.session.expiration.max-inactive-interval-seconds</p></td>
-<td
-class="tableblock halign-left valign-top"><p><code>EnableGemFireHttpSession.maxInactiveIntervalInSeconds</code></p></td>
-<td class="tableblock halign-left valign-top"><p>Session expiration
-timeout in seconds</p></td>
-<td class="tableblock halign-left valign-top"><p>1800</p></td>
+<td>spring.session.data.gemfire.session.expiration.max-inactive-interval-seconds</td>
+<td><code>EnableGemFireHttpSession.maxInactiveIntervalInSeconds</code></td>
+<td>Session expiration
+timeout in seconds</td>
+<td>1800</td>
 </tr>
 <tr class="odd">
-<td
-class="tableblock halign-left valign-top"><p>spring.session.data.gemfire.session.region.name</p></td>
-<td
-class="tableblock halign-left valign-top"><p><code>EnableGemFireHttpSession.regionName</code></p></td>
-<td class="tableblock halign-left valign-top"><p>Name of the client or
-peer Region used to store and access Session state.</p></td>
-<td
-class="tableblock halign-left valign-top"><p>ClusteredSpringSessions</p></td>
+<td>spring.session.data.gemfire.session.region.name</td>
+<td><code>EnableGemFireHttpSession.regionName</code></td>
+<td>Name of the client or
+peer Region used to store and access Session state.</td>
+<td>ClusteredSpringSessions</td>
 </tr>
 <tr class="even">
-<td
-class="tableblock halign-left valign-top"><p>spring.session.data.gemfire.session.serializer.bean-name</p></td>
-<td
-class="tableblock halign-left valign-top"><p><code>EnableGemFireHttpSession.sessionSerializerBeanName</code></p></td>
-<td class="tableblock halign-left valign-top"><p>Name of the bean in the
-Spring container implementing the serialization strategy</p></td>
-<td
-class="tableblock halign-left valign-top"><p>SessionPdxSerializer</p></td>
+<td>spring.session.data.gemfire.session.serializer.bean-name</td>
+<td><code>EnableGemFireHttpSession.sessionSerializerBeanName</code></td>
+<td>Name of the bean in the
+Spring container implementing the serialization strategy</td>
+<td>SessionPdxSerializer</td>
 </tr>
 </tbody>
 </table>
@@ -3857,7 +3567,7 @@ files to the server classpath as well.
 <div class="paragraph">
 
 To get a complete picture of how this works, see the
-{gh-samples-url}boot/gemfire-with-gfsh-servers\[sample\].
+<a href="https://github.com/spring-projects/spring-session-data-geode/tree/2.7.1/samples/boot/gemfire">-with-gfsh-servers\[sample\].
 
 </div>
 
@@ -3939,53 +3649,48 @@ implementations</caption>
 </colgroup>
 <thead>
 <tr class="header">
-<th class="tableblock halign-left valign-top">Class</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Default</th>
+<th>Class</th>
+<th>Description</th>
+<th>Default</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td
-class="tableblock halign-left valign-top"><p><code>IsDirtyPredicate.ALWAYS_DIRTY</code></p></td>
-<td class="tableblock halign-left valign-top"><p>New Session attribute
-values are always considered dirty.</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td><code>IsDirtyPredicate.ALWAYS_DIRTY</code></td>
+<td>New Session attribute
+values are always considered dirty.</td>
+<td></td>
 </tr>
 <tr class="even">
-<td
-class="tableblock halign-left valign-top"><p><code>IsDirtyPredicate.NEVER_DIRTY</code></p></td>
-<td class="tableblock halign-left valign-top"><p>New Session attribute
-values are never considered dirty.</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td><code>IsDirtyPredicate.NEVER_DIRTY</code></td>
+<td>New Session attribute
+values are never considered dirty.</td>
+<td></td>
 </tr>
 <tr class="odd">
-<td
-class="tableblock halign-left valign-top"><p><code>DeltaAwareDirtyPredicate</code></p></td>
-<td class="tableblock halign-left valign-top"><p>New Session attribute
+<td><code>DeltaAwareDirtyPredicate</code></td>
+<td>New Session attribute
 values are considered dirty when the old value and new value are
 different, if the new value's type does not implement <code>Delta</code>
 or the new value's <code>Delta.hasDelta()</code> method returns
-<strong>true</strong>.</p></td>
-<td class="tableblock halign-left valign-top"><p>Yes</p></td>
+<strong>true</strong>.</td>
+<td>Yes</td>
 </tr>
 <tr class="even">
-<td
-class="tableblock halign-left valign-top"><p><code>EqualsDirtyPredicate</code></p></td>
-<td class="tableblock halign-left valign-top"><p>New Session attribute
+<td><code>EqualsDirtyPredicate</code></td>
+<td>New Session attribute
 values are considered dirty iff the old value is not equal to the new
 value as determined by <code>Object.equals(:Object)</code>
-method.</p></td>
-<td class="tableblock halign-left valign-top"></td>
+method.</td>
+<td></td>
 </tr>
 <tr class="odd">
-<td
-class="tableblock halign-left valign-top"><p><code>IdentityEqualsPredicate</code></p></td>
-<td class="tableblock halign-left valign-top"><p>New Session attributes
+<td><code>IdentityEqualsPredicate</code></td>
+<td>New Session attributes
 values are considered dirty iff the old value is not the same as the new
 value using the identity equals operator (i.e.
-<code>oldValue != newValue</code>).</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<code>oldValue != newValue</code>).</td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -4657,11 +4362,11 @@ of the authentication mechanism being used.
 Note
 </div></td>
 <td class="content"><div class="paragraph">
-<p>Some implementations of <code>FindByIndexNameSessionRepository</code>
+Some implementations of <code>FindByIndexNameSessionRepository</code>
 will provide hooks to automatically index other session attributes. For
 example, many implementations will automatically ensure the current
 Spring Security user name is indexed with the index name
-<code>FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME</code>.</p>
+<code>FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME</code>.
 </div></td>
 </tr>
 </tbody>
@@ -5081,8 +4786,8 @@ The minimum requirements for Spring Session are:
 Note
 </div></td>
 <td class="content"><div class="paragraph">
-<p>At its core Spring Session only has a required dependency on
-<code>spring-jcl</code>.</p>
+At its core Spring Session only has a required dependency on
+<code>spring-jcl</code>.
 </div></td>
 </tr>
 </tbody>
