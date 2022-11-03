@@ -2,17 +2,9 @@
 title: HttpSession with VMware GemFire Client/Server using XML Configuration
 ---
 
-
-
 This guide describes how to configure VMware GemFire as a provider in
 Spring Session to transparently manage a Web application's
 `javax.servlet.http.HttpSession` using XML Configuration.
-
-
-
-## Updating Dependencies
-
-<div class="sectionbody">
 
 ## <a id="updating-dependencies"></a>Updating Dependencies
 
@@ -138,7 +130,6 @@ Comments:
 
 Bootstrap the VMware GemFire Server with the following:
 
-
 ```highlight
 @Configuration <!--SEE COMMENT 1-->
 @ImportResource("META-INF/spring/session-server.xml") <!--SEE COMMENT 1-->
@@ -164,7 +155,7 @@ The `springSessionRepositoryFilter` bean is responsible for replacing the
 provided by Spring Session and VMware GemFire.
 
 The `Filter` requires that we instruct Spring to load the `session-client.xml` configuration file.
-We can this with the following configuration in `src/main/webapp/WEB-INF/web.xml`:
+We do this with the following configuration in `src/main/webapp/WEB-INF/web.xml`:
 
 ```highlight
 <context-param>
@@ -195,12 +186,6 @@ The following in `src/main/webapp/WEB-INF/web.xml` performs this last step:
     <dispatcher>ERROR</dispatcher>
 </filter-mapping>
 ```
-
-
-
-
-
-
 
 The [DelegatingFilterProxy](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/filter/DelegatingFilterProxy.html)
 will look up a bean by the name of `springSessionRepositoryFilter` and cast it to a `Filter`.
@@ -253,16 +238,16 @@ public class SessionServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 2878267318695777395L;
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-		String attributeName = request.getParameter("attributeName");
-		String attributeValue = request.getParameter("attributeValue");
+        String attributeName = request.getParameter("attributeName");
+        String attributeValue = request.getParameter("attributeValue");
 
-		request.getSession().setAttribute(attributeName, attributeValue);
-		response.sendRedirect(request.getContextPath() + "/");
-	}
+        request.getSession().setAttribute(attributeName, attributeValue);
+        response.sendRedirect(request.getContextPath() + "/");
+    }
 }```
 
 Instead of using Tomcat's `HttpSession`, we persist the Session in VMware GemFire.
