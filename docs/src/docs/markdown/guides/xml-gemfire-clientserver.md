@@ -1,43 +1,6 @@
-<div id="header">
-
-# Spring Session - HttpSession with VMware GemFire Client/Server using XML Configuration
-
-
-<span id="author" class="author">John Blum</span>  
-
-
-
-<div id="toc" class="toc2">
-
-<div id="toctitle">
-
-Table of Contents
-
-
-
-- [Updating Dependencies](#spring-session-dependencies)
-- [Spring XML
-  Configuration](#httpsession-spring-xml-configuration-clientserver)
-  - [Client Configuration](#_client_configuration)
-  - [Server Configuration](#_server_configuration)
-- [XML Servlet Container
-  Initialization](#_xml_servlet_container_initialization)
-- [HttpSession with VMware GemFire (Client/Server) using XML Sample
-  Application](#spring-session-sample-xml-geode-clientserver)
-  - [Running the httpsession-gemfire-clientserver-xml Sample
-    Application](#_running_the_httpsession_gemfire_clientserver_xml_sample_application)
-  - [Exploring the httpsession-gemfire-clientserver-xml Sample
-    Application](#_exploring_the_httpsession_gemfire_clientserver_xml_sample_application)
-  - [How does it work?](#_how_does_it_work)
-
-
-
-
-
-
-<div id="preamble">
-
-<div class="sectionbody">
+---
+title: HttpSession with VMware GemFire Client/Server using XML Configuration
+---
 
 
 
@@ -47,60 +10,15 @@ Spring Session to transparently manage a Web application's
 
 
 
-<div class="admonitionblock note">
-
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td class="icon"><div class="title">
-Note
-</td>
-<td class="content">The completed guide can be found in the <a
-href="#spring-session-sample-xml-geode-clientserver">Spring XML
-Configuation</a>.</td>
-</tr>
-</tbody>
-</table>
-
-
-
-
-
-[Index](../index.html)
-
-
-
-
-
-
-
-<div class="sect1">
-
 ## Updating Dependencies
 
 <div class="sectionbody">
 
-
+## <a id="updating-dependencies"></a>Updating Dependencies
 
 Before using Spring Session, you must ensure that the required
-dependencies are included. If you are using *Maven*, include the
+dependencies are included. If you are using Maven, include the
 following `dependencies` in your `pom.xml`:
-
-
-
-<div class="listingblock">
-
-<div class="title">
-
-
-
-
-
-<div class="content">
 
 ```highlight
 <dependencies>
@@ -120,21 +38,7 @@ following `dependencies` in your `pom.xml`:
 </dependencies>
 ```
 
-
-
-
-
-
-
-
-
-<div class="sect1">
-
-## Spring XML Configuration
-
-<div class="sectionbody">
-
-
+## <a id="spring-xml-configuration"></a>Spring XML Configuration
 
 After adding the required dependencies and repository declarations, we
 can create the Spring configuration. The Spring configuration is
@@ -142,261 +46,154 @@ responsible for creating a `Servlet` `Filter` that replaces the
 `javax.servlet.http.HttpSession` with an implementation backed by Spring
 Session and VMware GemFire.
 
-
-
-<div class="sect2">
-
-### Client Configuration
-
-
+### <a id="client-configuration"></a>Client Configuration
 
 Add the following Spring configuration:
 
-
-
-<div class="listingblock">
-
-<div class="content">
-
 ```highlight
-Unresolved directive in xml-gemfire-clientserver.adoc - include::{samples-dir}xml/gemfire-clientserver/src/main/webapp/WEB-INF/spring/session-client.xml[tags=beans]
+    <context:annotation-config/>
+
+    <context:property-placeholder/>
+
+    <bean class="sample.client.ClientServerReadyBeanPostProcessor"/>
+
+    <!--SEE COMMENT 1-->
+    <util:properties id="gemfireProperties">
+        <prop key="log-level">${spring.data.gemfire.cache.log-level:error}</prop>
+    </util:properties>
+
+    <!--SEE COMMENT 2-->
+    <gfe:client-cache properties-ref="gemfireProperties" pool-name="gemfirePool"/>
+
+    <!--SEE COMMENT 3-->
+    <gfe:pool read-timeout="15000" retry-attempts="1" subscription-enabled="true">
+        <gfe:server host="localhost" port="${spring.data.gemfire.cache.server.port:40404}"/>
+    </gfe:pool>
+
+    <!--SEE COMMENT 4-->
+    <bean class="org.springframework.session.data.gemfire.config.annotation.web.http.GemFireHttpSessionConfiguration"
+        p:poolName="DEFAULT"/>
 ```
 
+Comments:
 
+1. (Optional) Include a `Properties` bean to configure certain aspects of the VMware GemFire `ClientCache` using [Tanzu GemFire Properties](https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-reference-topics-gemfire_properties.html). In this case, we are setting VMware GemFire's `log-level` using an application-specific System property, defaulting to `warning` if unspecified.
 
+2. Create an instance of an VMware GemFire `ClientCache`. Initialize it with the `gemfireProperties`.
 
+3. Configure a `Pool` of connections to communicate with the VMware GemFire Server in this  Client/Server topology. The `Pool` has been configured to connect directly to the server using the nested `gfe:server` element.
 
-<div class="colist arabic">
+4. A `GemFireHttpSessionConfiguration` bean is registered to enable Spring Session functionality.
 
-1.  (Optional) First, we can include a `Properties` bean to configure
-    certain aspects of the VMware GemFire `ClientCache` using [Pivotal
-    GemFire
-    Properties](https://geode.apache.org/docs/guide/%7Bmaster-data-store-version%7D/reference/topics/gemfire_properties.html).
-    In this case, we are just setting VMware GemFire's “log-level” using
-    an application-specific System property, defaulting to “warning” if
-    unspecified.
-
-2.  We must create an instance of an VMware GemFire `ClientCache`. We
-    initialize it with our `gemfireProperties`.
-
-3.  Then we configure a `Pool` of connections to talk to the VMware GemFire Server in our Client/Server topology. In our configuration, we
-    use sensible settings for timeouts, number of connections and so on.
-    Also, our `Pool` has been configured to connect directly to the
-    server (using the nested `gfe:server` element).
-
-4.  Finally, a `GemFireHttpSessionConfiguration` bean is registered to
-    enable Spring Session functionality.
-
-
-
-<div class="admonitionblock tip">
-
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td class="icon"><div class="title">
-Tip
-</td>
-<td class="content">In typical VMware GemFire production deployments,
+<p class="note">Note</strong>: In typical VMware GemFire production deployments,
 where the cluster includes potentially hundreds or thousands of servers
-(a.k.a. data nodes), it is more common for clients to connect to 1 or
+(a.k.a. data nodes), it is more common for clients to connect to one or
 more VMware GemFire Locators running in the same cluster. A Locator passes
 meta-data to clients about the servers available in the cluster, the
 individual server load and which servers have the client's data of
 interest, which is particularly important for direct, single-hop data
-access and latency-sensitive applications. See more details about the <a
-href="https://geode.apache.org/docs/guide/%7Bmaster-data-store-version%7D/topologies_and_comm/cs_configuration/standard_client_server_deployment.html">Client/Server
-Deployment</a> in the VMware GemFire User Guide.</td>
-</tr>
-</tbody>
-</table>
+access and latency-sensitive applications. For more information, see <a
+href="https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-topologies_and_comm-cs_configuration-standard_client_server_deployment.html">Standard Client/Server Deployment</a> in the VMware GemFire product documentation.</p>
 
+For more information about configuring Spring Data for VMware GemFire, refer to the <a
+href="https://docs.spring.io/spring-data/geode/docs/current/reference/html">Spring Data for Apache Geode Reference Guide</a>.
 
+### <a id="server-configuration"></a>Server Configuration
 
-<div class="admonitionblock note">
+We create a VMware GemFire Server. The cache client communicates with the server and sends session state to the server to manage.
 
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td class="icon"><div class="title">
-Note
-</td>
-<td class="content">For more information on configuring Spring Data for
-VMware GemFire, refer to the <a
-href="https://docs.spring.io/spring-data/geode/docs/current/reference/html">Reference
-Guide</a>.</td>
-</tr>
-</tbody>
-</table>
-
-
-
-
-
-<div class="sect2">
-
-### Server Configuration
-
-
-
-So far, we only covered one side of the equation. We also need an VMware GemFire Server for our cache client to talk to and send session state to
-the server to manage.
-
-
-
-
-
-In this sample, we will use the following XML configuration to spin up
-an VMware GemFire Server:
-
-
-
-<div class="listingblock">
-
-<div class="content">
+In this sample, we use the following XML configuration to configure and run a VMware GemFire Server:
 
 ```highlight
-Unresolved directive in xml-gemfire-clientserver.adoc - include::{samples-dir}xml/gemfire-clientserver/src/main/resources/META-INF/spring/session-server.xml[tags=beans]
+<context:annotation-config/>
+
+    <context:property-placeholder/>
+
+    <!--SEE COMMENT 1-->
+    <util:properties id="gemfireProperties">
+        <prop key="name">SpringSessionDataGeodeSampleXmlServer</prop>
+        <prop key="log-level">${spring.data.gemfire.cache.log-level:error}</prop>
+    </util:properties>
+
+    <!--SEE COMMENT 2-->
+    <gfe:cache properties-ref="gemfireProperties"/>
+
+    <!--SEE COMMENT 3-->
+    <gfe:cache-server port="${spring.data.gemfire.cache.server.port:40404}"/>
+
+    <!--SEE COMMENT 4-->
+    <bean class="org.springframework.session.data.gemfire.config.annotation.web.http.GemFireHttpSessionConfiguration"
+        p:maxInactiveIntervalInSeconds="30"/>
 ```
 
+Comments:
 
+1. (Optional) Include a `Properties` bean to configure certain aspects of the VMware GemFire `ClientCache` using [Tanzu GemFire Properties](https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-reference-topics-gemfire_properties.html). In this case, we are setting VMware GemFire's `log-level` using an application-specific System property, defaulting to `warning` if unspecified.
 
+2. Configure a VMware GemFire peer `Cache` instance. Initialize it with the VMware GemFire properties.
 
+3. Define a `CacheServer` with sensible configuration for `bind-address` and `port` used by our cache client application to connect to the server and send session state.
 
-<div class="colist arabic">
+4. Enable the same Spring Session functionality that was declared in the client XML configuration by registering an instance of `GemFireHttpSessionConfiguration`. Set the session expiration timeout to 30 seconds.
 
-1.  (Optional) First, we can include a `Properties` bean to configure
-    certain aspects of the VMware GemFire peer `Cache` using [Pivotal
-    GemFire
-    Properties](https://geode.apache.org/docs/guide/%7Bmaster-data-store-version%7D/reference/topics/gemfire_properties.html).
-    In this case, we are just setting VMware GemFire's “log-level” using
-    an application-specific System property, defaulting to “warning” if
-    unspecified.
+Bootstrap the VMware GemFire Server with the following:
 
-2.  We must configure an VMware GemFire peer `Cache` instance. We
-    initialize it with the VMware GemFire properties.
-
-3.  Next, we define a `CacheServer` with sensible configuration for
-    `bind-address` and `port` used by our cache client application to
-    connect to the server and send session state.
-
-4.  Finally, we enable the same Spring Session functionality we declared
-    in the client XML configuration by registering an instance of
-    `GemFireHttpSessionConfiguration`, except we set the session
-    expiration timeout to **30 seconds**. We explain what this means
-    later.
-
-
-
-
-
-The VMware GemFire Server gets bootstrapped with the following:
-
-
-
-<div class="listingblock">
-
-<div class="content">
 
 ```highlight
-Unresolved directive in xml-gemfire-clientserver.adoc - include::{samples-dir}xml/gemfire-clientserver/src/main/java/sample/server/GemFireServer.java[tags=class]
+@Configuration <!--SEE COMMENT 1-->
+@ImportResource("META-INF/spring/session-server.xml") <!--SEE COMMENT 1-->
+public class GemFireServer {
+
+    public static void main(String[] args) {
+        new AnnotationConfigApplicationContext(GemFireServer.class).registerShutdownHook();
+    }
 ```
 
+Comments:
 
+1. The `@Configuration` annotation designates this Java class as a source of Spring configuration metadata.
 
+2. The configuration primarily comes from the `META-INF/spring/session-server.xml` file.
 
+## <a id="xml-servlet-container-initialization"></a>XML Servlet Container Initialization
 
-<div class="admonitionblock tip">
-
-<table>
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td class="icon"><div class="title">
-Tip
-</td>
-<td class="content">Rather than defining a simple Java class with a
-<code>main</code> method, you might consider using Spring Boot
-instead.</td>
-</tr>
-</tbody>
-</table>
-
-
-
-<div class="colist arabic">
-
-1.  The `@Configuration` annotation designates this Java class as a
-    source of Spring configuration meta-data using 7.9. Annotation-based
-    container configuration\[Spring's annotation configuration
-    support\].
-
-2.  Primarily, the configuration comes from the
-    `META-INF/spring/session-server.xml` file.
-
-
-
-
-
-
-
-
-
-<div class="sect1">
-
-## XML Servlet Container Initialization
-
-<div class="sectionbody">
-
-
-
-Our [Spring XML
-Configuration](#httpsession-spring-xml-configuration-clientserver)
-created a Spring bean named `springSessionRepositoryFilter` that
-implements `javax.servlet.Filter` interface. The
-`springSessionRepositoryFilter` bean is responsible for replacing the
+[Spring XML Configuration](#spring-xml-configuration) created a Spring bean named
+`springSessionRepositoryFilter` that implements the `javax.servlet.Filter` interface.
+The `springSessionRepositoryFilter` bean is responsible for replacing the
 `javax.servlet.http.HttpSession` with a custom implementation that is
 provided by Spring Session and VMware GemFire.
 
-
-
-
-
-In order for our `Filter` to do its magic, we need to instruct Spring to
-load our `session-client.xml` configuration file.
-
-
-
-
-
-We do this with the following configuration:
-
-
-
-<div class="listingblock">
-
-<div class="title">
-
-src/main/webapp/WEB-INF/web.xml
-
-
-
-<div class="content">
+The `Filter` requires that we instruct Spring to load the `session-client.xml` configuration file.
+We can this with the following configuration in `src/main/webapp/WEB-INF/web.xml`:
 
 ```highlight
-Unresolved directive in xml-gemfire-clientserver.adoc - include::{samples-dir}xml/gemfire-clientserver/src/main/webapp/WEB-INF/web.xml[tags=context-param]
-Unresolved directive in xml-gemfire-clientserver.adoc - include::{samples-dir}xml/gemfire-clientserver/src/main/webapp/WEB-INF/web.xml[tags=listeners]
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/spring/session-client.xml</param-value>
+</context-param>
+<listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+```
+
+The [ContextLoaderListener](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/context/ContextLoaderListener.html)
+reads the `contextConfigLocation` context parameter value and picks up the `session-client.xml`
+configuration file.
+We must also ensure that the Servlet container, Tomcat, uses the `springSessionRepositoryFilter` for every request.
+
+The following in `src/main/webapp/WEB-INF/web.xml` performs this last step:
+
+```highlight
+<filter>
+    <filter-name>springSessionRepositoryFilter</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>springSessionRepositoryFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+</filter-mapping>
 ```
 
 
@@ -405,213 +202,69 @@ Unresolved directive in xml-gemfire-clientserver.adoc - include::{samples-dir}xm
 
 
 
-The
-[ContextLoaderListener](https://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#context-create)
-reads the `contextConfigLocation` context parameter value and picks up
-our *session-client.xml* configuration file.
-
-
-
-
-
-Finally, we need to ensure that our Servlet container (i.e. Tomcat) uses
-our `springSessionRepositoryFilter` for every request.
-
-
-
-
-
-The following snippet performs this last step for us:
-
-
-
-<div class="listingblock">
-
-<div class="title">
-
-src/main/webapp/WEB-INF/web.xml
-
-
-
-<div class="content">
-
-```highlight
-Unresolved directive in xml-gemfire-clientserver.adoc - include::{samples-dir}xml/gemfire-clientserver/src/main/webapp/WEB-INF/web.xml[tags=springSessionRepositoryFilter]
-```
-
-
-
-
-
-
-
-The
-[DelegatingFilterProxy](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/filter/DelegatingFilterProxy.html)
-will look up a bean by the name of `springSessionRepositoryFilter` and
-cast it to a `Filter`. For every HTTP request, the
-`DelegatingFilterProxy` is invoked, which delegates to the
+The [DelegatingFilterProxy](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/filter/DelegatingFilterProxy.html)
+will look up a bean by the name of `springSessionRepositoryFilter` and cast it to a `Filter`.
+For every HTTP request, the `DelegatingFilterProxy` is invoked, which delegates to the
 `springSessionRepositoryFilter`.
 
+## <a id="java-servlet-container-initialization"></a>HttpSession with VMware GemFire Client/Server Sample Application
 
+This section describes an HttpSession with VMware GemFire Client/Server using XML sample application.
 
+### <a id="running-sample-app"></a>Running the httpsession-gemfire-clientserver-xml Sample Application
 
+To run the sample app:
 
+1. Obtain the [source code](https://github.com/spring-projects/spring-session-data-geode/archive/2.7.1.zip).
 
+2. In a terminal window, run the server:
 
-<div class="sect1">
+    ```
+    ./gradlew :spring-session-sample-javaconfig-gemfire-clientserver:run
+    ```
 
-## HttpSession with VMware GemFire (Client/Server) using XML Sample Application
+3. In a separate terminal window, run the client:
 
-<div class="sectionbody">
+    ```
+    ./gradlew :spring-session-sample-javaconfig-gemfire-clientserver:tomcatRun
+   ```
 
-<div class="sect2">
+4. In a browser, access the application at <a href="http://localhost:8080/"
+class="bare">http://localhost:8080/</a>.
 
-### Running the httpsession-gemfire-clientserver-xml Sample Application
+In this sample, the web application is the VMware GemFire cache client and
+the server is standalone, separate JVM process.
 
+### <a id="exploring-sample-app"></a>Exploring the Sample Application
 
+1. In the application, complete the form with the following information:
 
-You can run the sample by obtaining the {download-url}\[source code\]
-and invoking the following commands.
+    - **Attribute Name:** `username`
+    - **Attribute Value:** `test``
 
+2. Click the **Set Attribute** button. You should now see the attribute name and value displayed in the table.
 
+### <a id="how"></a>How the Application Works
 
-
-
-First, you need to run the server using:
-
-
-
-<div class="listingblock">
-
-<div class="content">
-
-    $ ./gradlew :spring-session-sample-javaconfig-gemfire-clientserver:run
-
-
-
-
-
-
-
-Now, in a separate terminal, you can run the client using:
-
-
-
-<div class="listingblock">
-
-<div class="content">
-
-    $ ./gradlew :spring-session-sample-javaconfig-gemfire-clientserver:tomcatRun
-
-
-
-
-
-
-
-You should now be able to access the application at
-<a href="http://localhost:8080/" class="bare">http://localhost:8080/</a>.
-
-
-
-
-
-In this sample, the Web application is the VMware GemFire cache client and
-the server is a standalone, separate JVM process.
-
-
-
-
-
-<div class="sect2">
-
-### Exploring the httpsession-gemfire-clientserver-xml Sample Application
-
-
-
-Try using the application. Fill out the form with the following
-information:
-
-
-
-<div class="ulist">
-
-- **Attribute Name:** *username*
-
-- **Attribute Value:** *john*
-
-
-
-
-
-Now click the **Set Attribute** button. You should now see the values
-displayed in the table.
-
-
-
-
-
-<div class="sect2">
-
-### How does it work?
-
-
-
-We interact with the standard `HttpSession` in the `SessionServlet`
-shown below:
-
-
-
-<div class="listingblock">
-
-<div class="title">
-
-src/main/java/sample/SessionServlet.java
-
-
-
-<div class="content">
+We interact with the standard `HttpSession` in the `SessionServlet`, located in `src/main/java/sample/SessionServlet.java`:
 
 ```highlight
-Unresolved directive in xml-gemfire-clientserver.adoc - include::{samples-dir}xml/gemfire-clientserver/src/main/java/sample/client/SessionServlet.java[tags=class]
-```
+public class SessionServlet extends HttpServlet {
 
+	private static final long serialVersionUID = 2878267318695777395L;
 
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
+		String attributeName = request.getParameter("attributeName");
+		String attributeValue = request.getParameter("attributeValue");
 
+		request.getSession().setAttribute(attributeName, attributeValue);
+		response.sendRedirect(request.getContextPath() + "/");
+	}
+}```
 
-
-
-Instead of using Tomcat's `HttpSession`, we are actually persisting the
-Session in VMware GemFire.
-
-
-
-
-
-Spring Session creates a cookie named SESSION in your browser that
-contains the id of your Session. Go ahead and view the cookies (click
-for help with
-[Chrome](https://developer.chrome.com/devtools/docs/resources#cookies)
-or
-[Firefox](https://getfirebug.com/wiki/index.php/Cookies_Panel#Cookies_List)).
-
-
-
-
-
-
-
-
-
-
-
-<div id="footer">
-
-<div id="footer-text">
-
-Last updated 2022-10-27 16:45:57 -0700
-
-
-
-
+Instead of using Tomcat's `HttpSession`, we persist the Session in VMware GemFire.
+Spring Session creates a cookie named "SESSION" in your browser that contains the ID of
+the Session. You can view the cookies using your browser controls.

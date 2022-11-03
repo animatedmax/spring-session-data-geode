@@ -222,6 +222,6 @@ public class SessionServlet extends HttpServlet {
 }```
 
 
-Instead of using Tomcat's `HttpSession`, we persist the Session in VMware GemFire. Spring Session
-creates a cookie named "SESSION" in your browser that contains the ID of
+Instead of using Tomcat's `HttpSession`, we persist the Session in VMware GemFire.
+Spring Session creates a cookie named "SESSION" in your browser that contains the ID of
 the Session. You can view the cookies using your browser controls.

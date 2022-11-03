@@ -175,8 +175,8 @@ Unresolved directive in xml-gemfire-p2p.adoc - include::{samples-dir}xml/gemfire
     certain aspects of the VMware GemFire peer `Cache` using [VMware Tanzu
     GemFire
     Properties](https://geode.apache.org/docs/guide/%7Bmaster-data-store-version%7D/reference/topics/gemfire_properties.html).
-    In this case, we are just setting VMware GemFire's “log-level” using
-    an application-specific System property, defaulting to “warning” if
+    In this case, we are just setting VMware GemFire's "log-level" using
+    an application-specific System property, defaulting to "warning" if
     unspecified.
 
 2.  We must configure an VMware GemFire peer `Cache` instance. We
