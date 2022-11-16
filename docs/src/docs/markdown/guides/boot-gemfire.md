@@ -1,12 +1,12 @@
 ---
-title: HttpSession with VMware GemFire Client/Server using Spring Boot
+title: HttpSession with VMware GemFire Client-Server using Spring Boot
 ---
 
 This guide describes how to build a Spring Boot application configured
 with Spring Session to transparently leverage VMware GemFire to manage a
 web application's `javax.servlet.http.HttpSession`.
 
-In this sample, VMware GemFire's client/server topology is employed using
+In this sample, VMware GemFire's Client-Server topology is employed using
 a pair of Spring Boot applications, one to configure and run a VMware GemFire
 Server and another to configure and run the cache client, a Spring
 MVC-based web application making use of the `HttpSession`.
@@ -178,7 +178,7 @@ same cluster. A Locator passes meta-data to clients about the servers
 available in the cluster, the individual server load, and which servers
 have the client's data of interest, which is particularly important for
 direct, single-hop data access and latency-sensitive applications. For more information, see <a
-href="https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-topologies_and_comm-cs_configuration-standard_client_server_deployment.html">Standard Client/Server Deployment</a> in the VMware GemFire product documentation.</p>
+href="https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-topologies_and_comm-cs_configuration-standard_client_server_deployment.html">Standard Client-Server Deployment</a> in the VMware GemFire product documentation.</p>
 
 For more information about configuring Spring Data for VMware GemFire, see <a
 href="https://docs.spring.io/spring-data/geode/docs/current/reference/html">Spring Data for VMware GemFire Reference Guide</a> in the Spring product documentation.

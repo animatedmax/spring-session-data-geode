@@ -1,5 +1,5 @@
 ---
-title: HttpSession with VMware GemFire Client/Server using Java configuration
+title: HttpSession with VMware GemFire Client-Server using Java configuration
 ---
 
 This guide describes how to configure Spring Session to transparently
@@ -72,7 +72,7 @@ meta-data to clients about the servers available in the cluster, the
 individual server load and which servers have the client's data of
 interest, which is particularly important for direct, single-hop data
 access and latency-sensitive applications. For more information, see <a
-href="https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-topologies_and_comm-cs_configuration-standard_client_server_deployment.html">Standard Client/Server Deployment</a> in the VMware GemFire product documentation.</p>
+href="https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-topologies_and_comm-cs_configuration-standard_client_server_deployment.html">Standard Client-Server Deployment</a> in the VMware GemFire product documentation.</p>
 
 For more information about configuring Spring Data for VMware GemFire, refer to the <a
 href="https://docs.spring.io/spring-data/geode/docs/current/reference/html">Spring Data for Apache Geode Reference Guide</a>.
@@ -162,9 +162,9 @@ Comments:
 
 2. `AbstractHttpSessionApplicationInitializer` provides a mechanism to allow Spring to load the `ClientConfig`.
 
-## <a id="httpsession"></a>HttpSession Managed By a Client/Server Sample Application
+## <a id="httpsession"></a>HttpSession Managed By a Client-Server Sample Application
 
-This section describes an HttpSession managed by a Java-configured, VMware GemFire client/server sample application.
+This section describes an HttpSession managed by a Java-configured, VMware GemFire Client-Server sample application.
 
 ### <a id="running-sample-app"></a>Running the VMware GemFire Sample Application
 

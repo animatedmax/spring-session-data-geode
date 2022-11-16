@@ -1,5 +1,5 @@
 ---
-title: HttpSession with VMware GemFire Client/Server using XML Configuration
+title: HttpSession with VMware GemFire Client-Server using XML Configuration
 ---
 
 This guide describes how to configure VMware GemFire as a provider in
@@ -73,7 +73,7 @@ Comments:
 
 2. Create an instance of an VMware GemFire `ClientCache`. Initialize it with the `gemfireProperties`.
 
-3. Configure a `Pool` of connections to communicate with the VMware GemFire Server in this  Client/Server topology. The `Pool` has been configured to connect directly to the server using the nested `gfe:server` element.
+3. Configure a `Pool` of connections to communicate with the VMware GemFire Server in this  Client-Server topology. The `Pool` has been configured to connect directly to the server using the nested `gfe:server` element.
 
 4. A `GemFireHttpSessionConfiguration` bean is registered to enable Spring Session functionality.
 
@@ -85,7 +85,7 @@ meta-data to clients about the servers available in the cluster, the
 individual server load and which servers have the client's data of
 interest, which is particularly important for direct, single-hop data
 access and latency-sensitive applications. For more information, see <a
-href="https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-topologies_and_comm-cs_configuration-standard_client_server_deployment.html">Standard Client/Server Deployment</a> in the VMware GemFire product documentation.</p>
+href="https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-topologies_and_comm-cs_configuration-standard_client_server_deployment.html">Standard Client-Server Deployment</a> in the VMware GemFire product documentation.</p>
 
 For more information about configuring Spring Data for VMware GemFire, refer to the <a
 href="https://docs.spring.io/spring-data/geode/docs/current/reference/html">Spring Data for Apache Geode Reference Guide</a>.
@@ -192,9 +192,9 @@ will look up a bean by the name of `springSessionRepositoryFilter` and cast it t
 For every HTTP request, the `DelegatingFilterProxy` is invoked, which delegates to the
 `springSessionRepositoryFilter`.
 
-## <a id="java-servlet-container-initialization"></a>HttpSession with VMware GemFire Client/Server Sample Application
+## <a id="java-servlet-container-initialization"></a>HttpSession with VMware GemFire Client-Server Sample Application
 
-This section describes an HttpSession with VMware GemFire Client/Server using XML sample application.
+This section describes an HttpSession with VMware GemFire Client-Server using XML sample application.
 
 ### <a id="running-sample-app"></a>Running the httpsession-gemfire-clientserver-xml Sample Application
 

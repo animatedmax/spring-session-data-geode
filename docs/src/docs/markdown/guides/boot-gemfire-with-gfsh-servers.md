@@ -1,12 +1,12 @@
 ---
-title: HttpSession with GemFire Client/Server using Spring Boot and gfsh Started Servers
+title: HttpSession with GemFire Client-Server using Spring Boot and gfsh Started Servers
 ---
 
 This guide describes how to build a Spring Boot application configured
 with Spring Session to transparently leverage VMware GemFire
 to manage a Web application's `javax.servlet.http.HttpSession`.
 
-In this sample, we will use VMware GemFire's client/server
+In this sample, we will use VMware GemFire's Client-Server
 topology with a Spring Boot application that is both a Web application
 and a VMware GemFire client configured to manage `HttpSession`
 state stored in a cluster of VMware GemFire servers, which are
@@ -166,7 +166,7 @@ same cluster. A Locator passes meta-data to clients about the servers
 available in the cluster, the individual server load, and which servers
 have the client's data of interest, which is particularly important for
 direct, single-hop data access and latency-sensitive applications. For more information, see <a
-href="https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-topologies_and_comm-cs_configuration-standard_client_server_deployment.html">Standard Client/Server Deployment</a> in the VMware GemFire product documentation.</p>
+href="https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-topologies_and_comm-cs_configuration-standard_client_server_deployment.html">Standard Client-Server Deployment</a> in the VMware GemFire product documentation.</p>
 
 For more information about configuring Spring Data for VMware GemFire, see <a
 href="https://docs.spring.io/spring-data/geode/docs/current/reference/html">Spring Data for VMware GemFire Reference Guide</a> in the Spring product documentation.
@@ -409,7 +409,7 @@ since the Maven POM (or alternatively, Gradle build file) defines all
 your dependencies, you do not need to worry about the CLASSPATH (other
 than, perhaps your own application domain object types).
 
-This approach is shown in [HttpSession with VMware GemFire Client/Server using Spring Boot](boot-gemfire.html).
+This approach is shown in [HttpSession with VMware GemFire Client-Server using Spring Boot](boot-gemfire.html).
 
 ### <a id="running-the-client"></a>Running the Client
 
