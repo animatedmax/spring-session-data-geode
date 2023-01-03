@@ -1059,8 +1059,7 @@ once every second, evaluating each entry (i.e. Session) in the Region to
 determine if the entry has expired. You can control the number of
 expiration threads with the <code>gemfire.EXPIRY_THREADS</code>
 property. For more information, see
-[Expiration](https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-developing-expiration-chapter_overview.html)
-in the VMware GemFire product documentation.
+[Expiration](https://docs.vmware.com/en/VMware-Tanzu-GemFire/9.15/tgf/GUID-developing-expiration-chapter_overview.html) in the VMware GemFire product documentation.
 
 ### <a id="expiration-timeout-configuration"></a>Expiration Timeout Configuration
 
