@@ -19,6 +19,7 @@ Spring Session replaces the `javax.servlet.http.HttpSession` in an application c
 
 ### <a id="spring-boot"></a>Table 1. Sample Application using Spring Boot
 
+<table>
   <thead>
     <tr class="header">
       <th>Source Code</th>
@@ -47,6 +48,7 @@ Spring Session replaces the `javax.servlet.http.HttpSession` in an application c
 
 ### <a id="java-based"></a>Table 2. Sample Applications Using Spring's Java-Based Configuration
 
+<table>
   <thead>
     <tr class="header">
       <th>Source Code</th>
@@ -70,6 +72,7 @@ Spring Session replaces the `javax.servlet.http.HttpSession` in an application c
 
 ### <a id="xml-based"></a>Table 2. Sample Applications Using Spring's XML-Based Configuration
 
+<table>
   <thead>
     <tr class="header">
       <th>Source Code</th>
@@ -116,7 +119,7 @@ Additionally, VMware GemFire supports site-to-site replication using WAN topolog
 The ability to configure and use VMware GemFire's WAN functionality is independent of Spring Session.
 
 For more information about configuring VMware GemFire WAN functionality using Spring Data for
-VMware GemFire, see [Configuring WAN Gateways](https://docs-staging.vmware.com/en/Spring-Data-for-GemFire/2.3/sdfg/GUID-reference-bootstrap.html)
+VMware GemFire, see [Configuring WAN Gateways](https://docs-staging.vmware.com/en/Spring-Data-for-VMware-GemFire/2.7/sdfg/GUID-reference-bootstrap.html)
 in the Spring Data for VMware GemFire product documentation.
 
 #### <a id="gemfire-client-server"></a>VMware GemFire Client-Server
