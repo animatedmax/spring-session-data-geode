@@ -524,7 +524,8 @@ public class Initializer extends AbstractHttpSessionApplicationInitializer { <!-
     public Initializer() {
         super(Config.class); <!--SEE COMMENT 2-->
 	}
-}```
+}
+```
 
 Comments:
 
