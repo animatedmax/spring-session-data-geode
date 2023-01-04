@@ -154,7 +154,8 @@ public class Initializer extends AbstractHttpSessionApplicationInitializer { <!-
     public Initializer() {
         super(ClientConfig.class); <!--SEE COMMENT 2-->
     }
-}```
+}
+```
 
 Comments:
 
@@ -219,7 +220,8 @@ public class SessionServlet extends HttpServlet {
         request.getSession().setAttribute(attributeName, attributeValue);
         response.sendRedirect(request.getContextPath() + "/");
     }
-}```
+}
+```
 
 
 Instead of using Tomcat's `HttpSession`, we persist the Session in VMware GemFire.
